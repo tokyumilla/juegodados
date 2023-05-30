@@ -12,8 +12,9 @@ public class PlayerDTO {
     private ArrayList<RollDTO> rolls;
     private float winningRate;
 
-    public PlayerDTO(String name) {
+    public PlayerDTO(String name, ArrayList<RollDTO> rolls) {
         this.name = name;
+        this.rolls = rolls;
     }
 
     public PlayerDTO(Integer id, String name, Instant registerDate, ArrayList<RollDTO> rolls) {
@@ -34,11 +35,6 @@ public class PlayerDTO {
             return (i * 100) / rolls.size();
         }
     }
-
-    public void attach (RollDTO roll) {
-        rolls.add(roll);
-    }
-
 
     public Integer getId() {
         return id;

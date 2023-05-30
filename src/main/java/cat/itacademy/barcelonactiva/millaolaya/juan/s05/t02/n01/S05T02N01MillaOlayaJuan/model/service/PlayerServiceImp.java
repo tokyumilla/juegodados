@@ -70,7 +70,13 @@ public class PlayerServiceImp implements PlayerService {
         int firstroll = (int)Math.floor(Math.random()*6+1);
         int secondroll =(int)Math.floor(Math.random()*6+1);
         RollDTO roll = new RollDTO(firstroll,secondroll,playerDTO);
-        playerDTO.getRolls().add(roll);
+        if (playerDTO.getRolls()!=null) {
+            playerDTO.getRolls().add(roll);
+        } else {
+            List<RollDTO> rolls = playerDTO.getRolls();
+            rolls = new ArrayList<>();
+            playerDTO.getRolls().add(roll);
+        }
     }
 
 

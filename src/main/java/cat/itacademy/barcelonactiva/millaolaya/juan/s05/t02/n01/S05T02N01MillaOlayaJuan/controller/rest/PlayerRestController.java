@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,10 +24,10 @@ public class PlayerRestController {
 
 
     @PostMapping("/players")
-    public ResponseEntity<PlayerDTO> addPlayer(@RequestBody PlayerDTO playerDTO) {
-        if (playerService.checkName(playerDTO.getName())) {
+    public ResponseEntity<PlayerDTO> addPlayer(@RequestBody String playerName) {
+        if (playerService.checkName(playerName)) {
             try {
-                PlayerDTO _player = playerService.savePlayer(new PlayerDTO(playerDTO.getName()));
+                PlayerDTO _player = playerService.savePlayer(new PlayerDTO(playerName, new ArrayList<>()));
                 return new ResponseEntity<>(_player, HttpStatus.CREATED);
             } catch (Exception e) {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
