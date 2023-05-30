@@ -1,19 +1,21 @@
 package cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.dto;
 
-import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.entity.Roll;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class PlayerDTO {
     private Integer id;
     private String name;
-    private Date registerDate;
+    private LocalDate registerDate;
     private ArrayList<RollDTO> rolls;
     private float winningRate;
 
+    public PlayerDTO(String name, LocalDate registerDate) {
+        this.name = name;
+        this.registerDate = registerDate;
+    }
 
-    public PlayerDTO(Integer id, String name, Date registerDate, ArrayList<RollDTO> rolls) {
+    public PlayerDTO(Integer id, String name, LocalDate registerDate, ArrayList<RollDTO> rolls) {
         this.id = id;
         this.name = name;
         this.registerDate = registerDate;
@@ -54,11 +56,11 @@ public class PlayerDTO {
         this.name = name;
     }
 
-    public Date getRegisterDate() {
+    public LocalDate getRegisterDate() {
         return registerDate;
     }
 
-    public void setRegisterDate(Date registerDate) {
+    public void setRegisterDate(LocalDate registerDate) {
         this.registerDate = registerDate;
     }
 

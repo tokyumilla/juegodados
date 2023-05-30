@@ -2,8 +2,8 @@ package cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaO
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Entity
 @Table (name="Players")
@@ -16,14 +16,14 @@ public class Player {
     private String name;
 
     @Column(name= "registerDate")
-    private Date registerDate;
+    private LocalDate registerDate;
 
     @OneToMany (mappedBy = "player")
     private ArrayList<Roll> rolls;
 
     public Player (){}
 
-    public Player(Integer id, String name, Date registerDate, ArrayList<Roll> rolls) {
+    public Player(Integer id, String name, LocalDate registerDate, ArrayList<Roll> rolls) {
         this.id = id;
         this.name = name;
         this.registerDate = registerDate;
@@ -46,11 +46,11 @@ public class Player {
         this.name = name;
     }
 
-    public Date getRegisterDate() {
+    public LocalDate getRegisterDate() {
         return registerDate;
     }
 
-    public void setRegisterDate(Date registerDate) {
+    public void setRegisterDate(LocalDate registerDate) {
         this.registerDate = registerDate;
     }
 
