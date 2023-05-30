@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static ch.qos.logback.core.joran.spi.ConsoleTarget.findByName;
+
 @Service
 public class PlayerServiceImp implements PlayerService {
     @Autowired
@@ -72,8 +74,6 @@ public class PlayerServiceImp implements PlayerService {
     }
 
 
-
-
     @Override
     public PlayerDTO savePlayer(PlayerDTO playerDTO) {
         playerRepository.save(playerConverter.fromDto(playerDTO));
@@ -85,6 +85,12 @@ public class PlayerServiceImp implements PlayerService {
     public RollDTO saveRoll (RollDTO rollDTO) {
         rollRepository.save(rollConverter.fromDto(rollDTO));
         return rollDTO;
+    }
+
+    public boolean checkName (String name) {
+        Optional<Player> player = playerRepository.findByName(name);
+        if (player.isPresent()) return false;
+        else return true;
     }
 }
 

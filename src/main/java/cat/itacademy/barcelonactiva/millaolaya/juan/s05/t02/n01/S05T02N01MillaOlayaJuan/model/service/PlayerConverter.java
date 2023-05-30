@@ -16,7 +16,6 @@ public class PlayerConverter extends AbstractConverter<Player, PlayerDTO> {
             player.setId(dto.getId());
         }
         player.setName(dto.getName());
-        player.setRegisterDate(dto.getRegisterDate());
         player.setRolls((ArrayList<Roll>) converter.fromDto(dto.getRolls()));
         return player;
     }

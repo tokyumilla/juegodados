@@ -21,36 +21,42 @@ public class PlayerRestController {
     private PlayerService playerService;
 
 
-
     @PostMapping("/players")
-    public ResponseEntity<PlayerDTO> addPlayer (@RequestBody PlayerDTO playerDTO) {
-        try {
-            PlayerDTO _player= playerService.savePlayer(new PlayerDTO(playerDTO.getName(), LocalDate.now()));
-            //comprobar si el LocalDate no se actualiza
-            return new ResponseEntity<>(_player, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<PlayerDTO> addPlayer(@RequestBody PlayerDTO playerDTO) {
+        if (playerService.checkName(playerDTO.getName())) {
+            try {
+                PlayerDTO _player = playerService.savePlayer(new PlayerDTO(playerDTO.getName()));
+                return new ResponseEntity<>(_player, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
     }
 
     @PutMapping("/players/{id}")
-    public ResponseEntity<PlayerDTO> updatePlayer (@PathVariable ("id") int id, @RequestBody PlayerDTO playerDTO) {
+    public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable("id") int id, @RequestBody String playerName) {
         Optional<PlayerDTO> playerData = playerService.findPlayerById(id);
 
-        if(playerData.isPresent()) {
-            PlayerDTO _player = playerData.get();
-            _player.setName((playerDTO.getName()));
-            return new ResponseEntity<>(playerService.savePlayer(_player), HttpStatus.OK);
+        if (playerService.checkName(playerName)) {
+            if (playerData.isPresent()) {
+                PlayerDTO _player = playerData.get();
+                _player.setName(playerName);
+                return new ResponseEntity<>(playerService.savePlayer(_player), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
     @PostMapping("/player/{id}/games/")
-    public ResponseEntity<RollDTO> addRoll (@PathVariable("id") int id, @RequestBody PlayerDTO playerDTO) {
+    public ResponseEntity<PlayerDTO> addRoll(@PathVariable("id") int id, @RequestBody PlayerDTO playerDTO) {
         Optional<PlayerDTO> playerData = playerService.findPlayerById(id);
 
-        if(playerData.isPresent()) {
+        if (playerData.isPresent()) {
             PlayerDTO _player = playerData.get();
             playerService.rollDices(_player);
             return new ResponseEntity<>(playerService.savePlayer(_player), HttpStatus.OK);
@@ -59,6 +65,15 @@ public class PlayerRestController {
         }
     }
 
+    @DeleteMapping("/player/{id}/games/")
+    public ResponseEntity<HttpStatus> deleteRolls(@PathVariable("id") int id) {
+        try {
+            playerService.deleteRolls(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 }

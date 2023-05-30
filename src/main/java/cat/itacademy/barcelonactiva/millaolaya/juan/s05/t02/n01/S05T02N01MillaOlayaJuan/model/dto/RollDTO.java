@@ -67,10 +67,6 @@ public class RollDTO {
         return win;
     }
 
-    public void rollDices() {
-        this.firstRoll=
-    }
-
     @Override
     public String toString() {
         return "RollDTO{" +

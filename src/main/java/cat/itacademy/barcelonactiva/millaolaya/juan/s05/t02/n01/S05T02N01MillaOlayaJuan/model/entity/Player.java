@@ -1,7 +1,9 @@
 package cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -12,21 +14,21 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
+    @CreatedDate
     @Column(name= "registerDate")
-    private LocalDate registerDate;
+    private Instant registerDate;
 
     @OneToMany (mappedBy = "player")
     private ArrayList<Roll> rolls;
 
     public Player (){}
 
-    public Player(Integer id, String name, LocalDate registerDate, ArrayList<Roll> rolls) {
+    public Player(Integer id, String name, ArrayList<Roll> rolls) {
         this.id = id;
         this.name = name;
-        this.registerDate = registerDate;
         this.rolls = rolls;
     }
 
@@ -46,12 +48,8 @@ public class Player {
         this.name = name;
     }
 
-    public LocalDate getRegisterDate() {
+    public Instant getRegisterDate() {
         return registerDate;
-    }
-
-    public void setRegisterDate(LocalDate registerDate) {
-        this.registerDate = registerDate;
     }
 
     public ArrayList<Roll> getRolls() {

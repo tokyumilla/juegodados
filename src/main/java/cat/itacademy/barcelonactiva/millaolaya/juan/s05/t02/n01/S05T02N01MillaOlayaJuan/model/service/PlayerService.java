@@ -16,7 +16,7 @@ public interface PlayerService {
     Optional<RollDTO> findRollById(Integer id);
     RollDTO saveRoll (RollDTO playerDTO);
     void deleteRolls (Integer id);
-
     void rollDices (PlayerDTO playerDTO);
+    boolean checkName (String name);
 
 }
