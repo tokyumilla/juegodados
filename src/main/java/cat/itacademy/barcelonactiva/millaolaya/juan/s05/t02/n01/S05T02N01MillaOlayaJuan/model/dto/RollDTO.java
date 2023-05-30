@@ -17,6 +17,12 @@ public class RollDTO {
         setWin();
     }
 
+    public RollDTO(Integer firstRoll, Integer secondRoll, PlayerDTO player) {
+        this.firstRoll = firstRoll;
+        this.secondRoll = secondRoll;
+        this.player = player;
+    }
+
     public void setWin() {
         if (firstRoll+secondRoll==7) {
             this.win=true;
@@ -59,6 +65,10 @@ public class RollDTO {
 
     public boolean isWin() {
         return win;
+    }
+
+    public void rollDices() {
+        this.firstRoll=
     }
 
     @Override

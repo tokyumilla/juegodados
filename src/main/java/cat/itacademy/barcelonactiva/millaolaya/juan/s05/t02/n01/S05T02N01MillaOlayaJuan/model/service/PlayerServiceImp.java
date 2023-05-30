@@ -9,64 +9,82 @@ import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PlayerServiceImp implements PlayerService {
-
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
     private RollRepository rollRepository;
 
-    PlayerConverter converter = new PlayerConverter();
+    PlayerConverter playerConverter = new PlayerConverter();
+    RollConverter rollConverter = new RollConverter();
 
     @Override
-    public List<PlayerDTO> findAll() {
+    public List<PlayerDTO> findAllPlayers() {
         List<Player> players = playerRepository.findAll();
-        return converter.fromEntity(players);
+        return playerConverter.fromEntity(players);
     }
 
     @Override
-    public Optional<PlayerDTO> findById(Integer id) {
+    public Optional<PlayerDTO> findPlayerById(Integer id) {
         Optional<Player> player = playerRepository.findById(id);
-        if (player.isPresent()) return Optional.of(converter.fromEntity(player.get()));
+        if (player.isPresent()) return Optional.of(playerConverter.fromEntity(player.get()));
         else return Optional.empty();
     }
 
     @Override
-    public PlayerDTO save(PlayerDTO playerDTO) {
-        playerRepository.save(converter.fromDto(playerDTO));
-        return playerDTO;
-    }
-
-    @Override
-    public void deleteById(Integer id) {
+    public void deletePlayerById(Integer id) {
         playerRepository.deleteById(id);
     }
 
     @Override
-    public List<RollDTO> findAll() {
+    public List<RollDTO> findAllRolls() {
         List<Roll> rolls = rollRepository.findAll();
-        return converter.fromEntity(rolls);
+        return rollConverter.fromEntity(rolls);
     }
 
     @Override
-    public Optional<RollDTO> findById(Integer id) {
+    public Optional<RollDTO> findRollById(Integer id) {
         Optional<Roll> roll = rollRepository.findById(id);
-        if (roll.isPresent()) return Optional.of(converter.fromEntity(roll.get()));
+        if (roll.isPresent()) return Optional.of(rollConverter.fromEntity(roll.get()));
         else return Optional.empty();
     }
 
     @Override
-    public RollDTO save(RollDTO rollDTO) {
-        rollRepository.save(converter.fromDto(rollDTO));
-        return rollDTO;
+    public void deleteRolls(Integer id) {
+        Optional<Player> player = playerRepository.findById(id);
+        if (player.isPresent()&& player.get().getRolls()!=null) {
+            ArrayList<Roll> rolls = player.get().getRolls();
+            rollRepository.deleteAll(rolls);
+        }
+    }
+    //probar si no deja datos incoherentes
+
+    public void rollDices (PlayerDTO playerDTO) {
+        int firstroll = (int)Math.floor(Math.random()*6+1);
+        int secondroll =(int)Math.floor(Math.random()*6+1);
+        RollDTO roll = new RollDTO(firstroll,secondroll,playerDTO);
+        playerDTO.getRolls().add(roll);
     }
 
+
+
+
     @Override
-    public void deleteById(Integer id) {
-        rollRepository.deleteById(id);
+    public PlayerDTO savePlayer(PlayerDTO playerDTO) {
+        playerRepository.save(playerConverter.fromDto(playerDTO));
+        return playerDTO;
+    }
+
+
+    @Override
+    public RollDTO saveRoll (RollDTO rollDTO) {
+        rollRepository.save(rollConverter.fromDto(rollDTO));
+        return rollDTO;
     }
 }
+

@@ -9,12 +9,14 @@ import java.util.Optional;
 public interface PlayerService {
     List<PlayerDTO> findAllPlayers();
     Optional<PlayerDTO> findPlayerById(Integer id);
-    PlayerDTO save (PlayerDTO playerDTO);
+    PlayerDTO savePlayer (PlayerDTO playerDTO);
     void deletePlayerById (Integer id);
 
     List<RollDTO> findAllRolls();
     Optional<RollDTO> findRollById(Integer id);
-    RollDTO save (RollDTO playerDTO);
+    RollDTO saveRoll (RollDTO playerDTO);
     void deleteRolls (Integer id);
+
+    void rollDices (PlayerDTO playerDTO);
 
 }
