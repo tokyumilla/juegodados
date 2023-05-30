@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http:localhost:8080")
@@ -73,6 +74,11 @@ public class PlayerRestController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/players/")
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
+
     }
 
 
