@@ -41,17 +41,19 @@ public class PlayerRestController {
     public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable("id") int id, @RequestBody String playerName) {
         Optional<PlayerDTO> playerData = playerService.findPlayerById(id);
 
-        if (playerService.checkName(playerName)) {
-            if (playerData.isPresent()) {
+
+        if (playerData.isPresent()) {
+            if (playerService.checkName(playerName)) {
                 PlayerDTO _player = playerData.get();
                 _player.setName(playerName);
                 return new ResponseEntity<>(playerService.savePlayer(_player), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
     }
 
     @PostMapping("/player/{id}/games/")
