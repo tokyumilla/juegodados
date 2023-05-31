@@ -12,11 +12,16 @@ public interface PlayerService {
     PlayerDTO savePlayer (PlayerDTO playerDTO);
     void deletePlayerById (Integer id);
 
-    List<RollDTO> findAllRolls();
+    List<RollDTO> findAllRolls(int id);
     Optional<RollDTO> findRollById(Integer id);
     RollDTO saveRoll (RollDTO playerDTO);
     void deleteRolls (Integer id);
     void rollDices (PlayerDTO playerDTO);
     boolean checkName (String name);
+    float calculateWinningRate ();
+
+    PlayerDTO findWinner();
+    PlayerDTO findLoser();
+
 
 }

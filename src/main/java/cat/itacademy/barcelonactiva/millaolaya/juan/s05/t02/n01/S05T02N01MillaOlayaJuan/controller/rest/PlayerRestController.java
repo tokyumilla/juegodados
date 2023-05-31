@@ -81,8 +81,49 @@ public class PlayerRestController {
 
     @GetMapping("/players/")
     public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
+        try {
+            List<PlayerDTO> players = playerService.findAllPlayers();
 
+            if (players.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(players, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
+    @GetMapping("/players/{id}/games")
+    public ResponseEntity<List<RollDTO>> getAllRolls(@PathVariable ("id") int id) {
+        try {
+            List<RollDTO> rolls = playerService.findAllRolls(id);
+            if (rolls != null) return new ResponseEntity<>(rolls, HttpStatus.OK);
+            else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @GetMapping("/player/ranking")
+    public ResponseEntity<Float> getGameWinningRate () {
+        try {
+            Float rate = playerService.calculateWinningRate();
+            return new ResponseEntity<>(rate, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/players/ranking/loser")
+    public ResponseEntity<PlayerDTO> getLoser () {
+        try {
+            PlayerDTO player = playerService.findLoser();
+            return new ResponseEntity<>(player, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
+
+
+

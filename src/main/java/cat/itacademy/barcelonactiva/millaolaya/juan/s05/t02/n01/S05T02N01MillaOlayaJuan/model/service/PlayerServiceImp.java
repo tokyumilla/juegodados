@@ -7,11 +7,15 @@ import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOl
 import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.repository.PlayerRepository;
 import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.repository.RollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ch.qos.logback.core.joran.spi.ConsoleTarget.findByName;
 
@@ -44,9 +48,14 @@ public class PlayerServiceImp implements PlayerService {
     }
 
     @Override
-    public List<RollDTO> findAllRolls() {
-        List<Roll> rolls = rollRepository.findAll();
-        return rollConverter.fromEntity(rolls);
+    public List<RollDTO> findAllRolls(int id) {
+        Optional<Player> playerData = playerRepository.findById(id);
+
+        if (playerData.isPresent()) {
+            return rollConverter.fromEntity(playerData.get().getRolls());
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -59,18 +68,18 @@ public class PlayerServiceImp implements PlayerService {
     @Override
     public void deleteRolls(Integer id) {
         Optional<Player> player = playerRepository.findById(id);
-        if (player.isPresent()&& player.get().getRolls()!=null) {
+        if (player.isPresent() && player.get().getRolls() != null) {
             ArrayList<Roll> rolls = player.get().getRolls();
             rollRepository.deleteAll(rolls);
         }
     }
     //probar si no deja datos incoherentes
 
-    public void rollDices (PlayerDTO playerDTO) {
-        int firstroll = (int)Math.floor(Math.random()*6+1);
-        int secondroll =(int)Math.floor(Math.random()*6+1);
-        RollDTO roll = new RollDTO(firstroll,secondroll,playerDTO);
-        if (playerDTO.getRolls()!=null) {
+    public void rollDices(PlayerDTO playerDTO) {
+        int firstroll = (int) Math.floor(Math.random() * 6 + 1);
+        int secondroll = (int) Math.floor(Math.random() * 6 + 1);
+        RollDTO roll = new RollDTO(firstroll, secondroll, playerDTO);
+        if (playerDTO.getRolls() != null) {
             playerDTO.getRolls().add(roll);
         } else {
             List<RollDTO> rolls = playerDTO.getRolls();
@@ -88,15 +97,39 @@ public class PlayerServiceImp implements PlayerService {
 
 
     @Override
-    public RollDTO saveRoll (RollDTO rollDTO) {
+    public RollDTO saveRoll(RollDTO rollDTO) {
         rollRepository.save(rollConverter.fromDto(rollDTO));
         return rollDTO;
     }
 
-    public boolean checkName (String name) {
+    public boolean checkName(String name) {
         Optional<Player> player = playerRepository.findByName(name);
         if (player.isPresent()) return false;
         else return true;
+    }
+
+    @Override
+    public float calculateWinningRate() {
+        float totalRates = 0;
+        List<PlayerDTO> players = playerConverter.fromEntity(playerRepository.findAll());
+        for (PlayerDTO p: players) {
+            totalRates += p.getWinningRate();
+        }
+        return totalRates/players.size();
+    }
+
+    @Override
+    public PlayerDTO findWinner() {
+        List<PlayerDTO> players = playerConverter.fromEntity(playerRepository.findAll());
+        List<PlayerDTO> sortedList = players.stream().sorted(Comparator.comparingDouble(PlayerDTO::getWinningRate).reversed()).collect(Collectors.toList());
+        return sortedList.get(0);
+    }
+
+    @Override
+    public PlayerDTO findLoser() {
+        List<PlayerDTO> players = playerConverter.fromEntity(playerRepository.findAll());
+        List<PlayerDTO> sortedList = players.stream().sorted(Comparator.comparingDouble(PlayerDTO::getWinningRate)).collect(Collectors.toList());
+        return sortedList.get(0);
     }
 }
 
