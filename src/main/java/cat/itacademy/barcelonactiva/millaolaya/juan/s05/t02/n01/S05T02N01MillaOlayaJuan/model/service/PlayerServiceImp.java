@@ -82,14 +82,18 @@ public class PlayerServiceImp implements PlayerService {
     public void rollDices(PlayerDTO playerDTO) {
         int firstroll = (int) Math.floor(Math.random() * 6 + 1);
         int secondroll = (int) Math.floor(Math.random() * 6 + 1);
-        RollDTO roll = new RollDTO(firstroll, secondroll);
+        RollDTO rollDTO = new RollDTO(firstroll, secondroll);
         if (playerDTO.getRolls() != null) {
-            playerDTO.getRolls().add(roll);
+            playerDTO.getRolls().add(rollDTO);
         } else {
             List<RollDTO> rolls = playerDTO.getRolls();
             rolls = new ArrayList<>();
-            playerDTO.getRolls().add(roll);
+            playerDTO.getRolls().add(rollDTO);
         }
+        Roll roll = rollConverter.fromDto(rollDTO);
+        Player player = playerConverter.fromDto(playerDTO);
+        roll.setPlayer(player);
+        rollRepository.save(roll);
     }
 
 

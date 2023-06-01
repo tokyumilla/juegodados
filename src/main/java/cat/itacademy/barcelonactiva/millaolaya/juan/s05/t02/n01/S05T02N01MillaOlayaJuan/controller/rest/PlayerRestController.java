@@ -59,7 +59,7 @@ public class PlayerRestController {
     }
 
     @PostMapping("/{id}/games/")
-    public ResponseEntity<PlayerDTO> addRoll(@PathVariable("id") int id, @RequestBody PlayerDTO playerDTO) {
+    public ResponseEntity<PlayerDTO> addRoll(@PathVariable("id") int id) {
         Optional<PlayerDTO> playerData = playerService.findPlayerById(id);
 
         if (playerData.isPresent()) {
