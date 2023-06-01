@@ -4,6 +4,8 @@ package cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaO
 import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.dto.PlayerDTO;
 import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.dto.RollDTO;
 import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.service.PlayerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,14 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http:localhost:8080")
 @RestController
-@RequestMapping
+@RequestMapping("/players")
 public class PlayerRestController {
 
     @Autowired
     private PlayerService playerService;
 
 
-    @PostMapping("/players")
+    @PostMapping
     public ResponseEntity<PlayerDTO> addPlayer(@RequestBody String playerName) {
         if (playerService.checkName(playerName)) {
             try {
@@ -37,7 +39,7 @@ public class PlayerRestController {
         }
     }
 
-    @PutMapping("/players/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable("id") int id, @RequestBody String playerName) {
         Optional<PlayerDTO> playerData = playerService.findPlayerById(id);
 
@@ -56,7 +58,7 @@ public class PlayerRestController {
 
     }
 
-    @PostMapping("/player/{id}/games/")
+    @PostMapping("/{id}/games/")
     public ResponseEntity<PlayerDTO> addRoll(@PathVariable("id") int id, @RequestBody PlayerDTO playerDTO) {
         Optional<PlayerDTO> playerData = playerService.findPlayerById(id);
 
@@ -69,7 +71,7 @@ public class PlayerRestController {
         }
     }
 
-    @DeleteMapping("/player/{id}/games/")
+    @DeleteMapping("/{id}/games/")
     public ResponseEntity<HttpStatus> deleteRolls(@PathVariable("id") int id) {
         try {
             playerService.deleteRolls(id);
@@ -79,7 +81,7 @@ public class PlayerRestController {
         }
     }
 
-    @GetMapping("/players/")
+    @GetMapping("/")
     public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
         try {
             List<PlayerDTO> players = playerService.findAllPlayers();
@@ -93,8 +95,8 @@ public class PlayerRestController {
         }
     }
 
-    @GetMapping("/players/{id}/games")
-    public ResponseEntity<List<RollDTO>> getAllRolls(@PathVariable ("id") int id) {
+    @GetMapping("/{id}/games")
+    public ResponseEntity<List<RollDTO>> getAllRolls(@PathVariable("id") int id) {
         try {
             List<RollDTO> rolls = playerService.findAllRolls(id);
             if (rolls != null) return new ResponseEntity<>(rolls, HttpStatus.OK);
@@ -104,8 +106,8 @@ public class PlayerRestController {
         }
     }
 
-    @GetMapping("/player/ranking")
-    public ResponseEntity<Float> getGameWinningRate () {
+    @GetMapping("/ranking")
+    public ResponseEntity<Float> getGameWinningRate() {
         try {
             Float rate = playerService.calculateWinningRate();
             return new ResponseEntity<>(rate, HttpStatus.OK);
@@ -114,8 +116,8 @@ public class PlayerRestController {
         }
     }
 
-    @GetMapping("/players/ranking/loser")
-    public ResponseEntity<PlayerDTO> getLoser () {
+    @GetMapping("/ranking/loser")
+    public ResponseEntity<PlayerDTO> getLoser() {
         try {
             PlayerDTO player = playerService.findLoser();
             return new ResponseEntity<>(player, HttpStatus.OK);
@@ -123,6 +125,17 @@ public class PlayerRestController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/ranking/winner")
+    public ResponseEntity<PlayerDTO> getWinner() {
+        try {
+            PlayerDTO player = playerService.findWinner();
+            return new ResponseEntity<>(player, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
 
 

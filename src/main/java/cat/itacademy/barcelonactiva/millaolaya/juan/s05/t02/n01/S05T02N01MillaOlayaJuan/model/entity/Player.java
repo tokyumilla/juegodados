@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table (name="Players")
@@ -22,11 +21,11 @@ public class Player {
     private Instant registerDate;
 
     @OneToMany (mappedBy = "player")
-    private ArrayList<Roll> rolls;
+    private List<Roll> rolls;
 
     public Player (){}
 
-    public Player(Integer id, String name, ArrayList<Roll> rolls) {
+    public Player(Integer id, String name, List<Roll> rolls) {
         this.id = id;
         this.name = name;
         this.rolls = rolls;
@@ -52,11 +51,11 @@ public class Player {
         return registerDate;
     }
 
-    public ArrayList<Roll> getRolls() {
+    public List<Roll> getRolls() {
         return rolls;
     }
 
-    public void setRolls(ArrayList<Roll> rolls) {
+    public void setRolls(List<Roll> rolls) {
         this.rolls = rolls;
     }
 

@@ -1,7 +1,6 @@
 package cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.dto;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PlayerDTO {
@@ -20,6 +19,7 @@ public class PlayerDTO {
     public PlayerDTO(Integer id, String name, Instant registerDate, ArrayList<RollDTO> rolls) {
         this.id = id;
         this.name = name;
+        this.registerDate = registerDate;
         this.rolls = rolls;
         this.winningRate = setWinningRate();
     }

@@ -7,8 +7,6 @@ import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOl
 import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.repository.PlayerRepository;
 import cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaOlayaJuan.model.repository.RollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,17 +15,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ch.qos.logback.core.joran.spi.ConsoleTarget.findByName;
 
 @Service
 public class PlayerServiceImp implements PlayerService {
-    @Autowired
-    private PlayerRepository playerRepository;
-    @Autowired
-    private RollRepository rollRepository;
 
-    PlayerConverter playerConverter = new PlayerConverter();
-    RollConverter rollConverter = new RollConverter();
+    private final PlayerRepository playerRepository ;
+
+    private final RollRepository rollRepository;
+    private final PlayerConverter playerConverter;
+    private final RollConverter rollConverter;
+
+    public PlayerServiceImp(PlayerRepository playerRepository, RollRepository rollRepository, PlayerConverter playerConverter, RollConverter rollConverter) {
+        this.playerRepository = playerRepository;
+        this.rollRepository = rollRepository;
+        this.playerConverter = playerConverter;
+        this.rollConverter = rollConverter;
+    }
+
 
     @Override
     public List<PlayerDTO> findAllPlayers() {
@@ -69,7 +73,7 @@ public class PlayerServiceImp implements PlayerService {
     public void deleteRolls(Integer id) {
         Optional<Player> player = playerRepository.findById(id);
         if (player.isPresent() && player.get().getRolls() != null) {
-            ArrayList<Roll> rolls = player.get().getRolls();
+            List<Roll> rolls = player.get().getRolls();
             rollRepository.deleteAll(rolls);
         }
     }
@@ -78,7 +82,7 @@ public class PlayerServiceImp implements PlayerService {
     public void rollDices(PlayerDTO playerDTO) {
         int firstroll = (int) Math.floor(Math.random() * 6 + 1);
         int secondroll = (int) Math.floor(Math.random() * 6 + 1);
-        RollDTO roll = new RollDTO(firstroll, secondroll, playerDTO);
+        RollDTO roll = new RollDTO(firstroll, secondroll);
         if (playerDTO.getRolls() != null) {
             playerDTO.getRolls().add(roll);
         } else {
