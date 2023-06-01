@@ -60,6 +60,10 @@ public class Roll {
         return win;
     }
 
+    public void setWin(boolean win) {
+        this.win = win;
+    }
+
     public Player getPlayer() {
         return player;
     }

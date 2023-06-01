@@ -17,6 +17,7 @@ public class RollConverter extends AbstractConverter<Roll, RollDTO> {
         }
         roll.setFirstRoll(dto.getFirstRoll());
         roll.setSecondRoll(dto.getSecondRoll());
+        roll.setWin(dto.isWin());
 
         return roll;
     }

@@ -4,7 +4,7 @@ public class RollDTO {
     private Integer id;
     private Integer firstRoll;
     private Integer secondRoll;
-//    private PlayerDTO player;
+
     private boolean win;
 
     public RollDTO(){}
@@ -13,14 +13,13 @@ public class RollDTO {
         this.id = id;
         this.firstRoll = firstRoll;
         this.secondRoll = secondRoll;
-//        this.player = player;
         setWin();
     }
 
     public RollDTO(Integer firstRoll, Integer secondRoll) {
         this.firstRoll = firstRoll;
         this.secondRoll = secondRoll;
-//        this.player = player;
+        setWin();
     }
 
     public void setWin() {
@@ -55,13 +54,6 @@ public class RollDTO {
         this.secondRoll = secondRoll;
     }
 
-//    public PlayerDTO getPlayer() {
-//        return player;
-//    }
-
-//    public void setPlayer(PlayerDTO player) {
-//        this.player = player;
-//    }
 
     public boolean isWin() {
         return win;
