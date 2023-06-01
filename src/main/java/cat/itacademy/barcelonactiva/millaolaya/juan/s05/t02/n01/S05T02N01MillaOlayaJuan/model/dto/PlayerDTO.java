@@ -14,6 +14,7 @@ public class PlayerDTO {
     public PlayerDTO(String name, ArrayList<RollDTO> rolls) {
         this.name = name;
         this.rolls = rolls;
+        this.winningRate = setWinningRate();
     }
 
     public PlayerDTO(Integer id, String name, Instant registerDate, ArrayList<RollDTO> rolls) {
@@ -25,15 +26,18 @@ public class PlayerDTO {
     }
 
     public float setWinningRate() {
+        float winningRate;
         if (rolls.isEmpty()) {
-            return 0;
+            winningRate = 0;
         } else {
             int i = 0;
             for (RollDTO r : rolls) {
                 if (r.isWin()) i++;
             }
-            return (i * 100) / rolls.size();
+            winningRate = (i * 100) / rolls.size();
         }
+        this.winningRate=winningRate;
+        return winningRate;
     }
 
     public Integer getId() {

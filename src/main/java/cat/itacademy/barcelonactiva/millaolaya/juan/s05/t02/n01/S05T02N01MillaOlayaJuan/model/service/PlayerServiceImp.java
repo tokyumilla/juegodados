@@ -90,6 +90,7 @@ public class PlayerServiceImp implements PlayerService {
             rolls = new ArrayList<>();
             playerDTO.getRolls().add(rollDTO);
         }
+        playerDTO.setWinningRate();
         Roll roll = rollConverter.fromDto(rollDTO);
         Player player = playerConverter.fromDto(playerDTO);
         roll.setPlayer(player);

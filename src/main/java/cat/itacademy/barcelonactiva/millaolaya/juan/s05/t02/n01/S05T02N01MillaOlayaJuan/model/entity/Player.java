@@ -2,11 +2,13 @@ package cat.itacademy.barcelonactiva.millaolaya.juan.s05.t02.n01.S05T02N01MillaO
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table (name="Players")
 public class Player {
     @Id
@@ -16,8 +18,9 @@ public class Player {
     @Column(name = "name", unique = true)
     private String name;
 
-    @CreatedDate
+
     @Column(name= "registerDate")
+    @CreatedDate
     private Instant registerDate;
 
     @OneToMany (mappedBy = "player")

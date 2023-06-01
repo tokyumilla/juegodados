@@ -71,7 +71,7 @@ public class PlayerRestController {
         }
     }
 
-    @DeleteMapping("/{id}/games/")
+    @DeleteMapping("/{id}/games")
     public ResponseEntity<HttpStatus> deleteRolls(@PathVariable("id") int id) {
         try {
             playerService.deleteRolls(id);
